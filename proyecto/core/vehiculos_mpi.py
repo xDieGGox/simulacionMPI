@@ -2,8 +2,8 @@
 from mpi4py import MPI
 from multiprocessing import Process, Manager, Lock
 import time
-from proyecto.core.vehiculos_mpi import Vehiculo
-
+from proyecto.core.vehiculo import Vehiculo
+from proyecto.core.semaforo import Semaforo
 
 def iniciar_generador_vehiculos(comm):
     rank = comm.Get_rank()
