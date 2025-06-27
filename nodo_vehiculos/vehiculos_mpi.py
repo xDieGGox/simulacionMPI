@@ -3,6 +3,7 @@ import threading
 import sys
 import os
 import time
+import socket
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from core.vehiculo import Vehiculo
