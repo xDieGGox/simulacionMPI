@@ -8,27 +8,26 @@ import socket
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from core.vehiculo import Vehiculo
 from core.utils import log
+from core.tklog import LogWindow
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 hostname = socket.gethostname()
 
-print(f"[RANK {rank} en {hostname}] Proceso iniciado correctamente.")
-log(f"Proceso de vehículos ejecutándose en {hostname} con rank {rank}", "INFO")
-
-
-from core.tklog import LogWindow
-log_window = LogWindow("Vehículos MPI")
-
-log_window.write(f"Vehículos activos en {hostname} con rank {rank}")
-
-
-
-
-
 
 if rank != 0:
     exit()
+
+
+# Logs iniciales
+print(f"[RANK {rank} en {hostname}] Proceso iniciado correctamente.")
+log(f"Proceso de vehículos ejecutándose en {hostname} con rank {rank}", "VEHICULOS")
+
+# Ventana de log local
+log_window = LogWindow(f"Vehículos - {hostname}")
+log_window.write(f"[VEHICULOS][{hostname}][RANK {rank}] Proceso iniciado.")
+
+
 
 vias = ["Norte->Sur", "Sur->Norte", "Este->Oeste", "Oeste->Este"]
 
@@ -60,10 +59,14 @@ def recibir_semaforos():
             estado_vehiculo = "detenido"
 
         comm.send(("vehiculo", via, estado_vehiculo), dest=2, tag=20)
+        log_window.write(f"Semáforo {via} → {nuevo_estado.upper()} → Vehículo {estado_vehiculo.upper()}")
 
 # Ejecutar la recepción en un hilo
 thread = threading.Thread(target=recibir_semaforos, daemon=True)
 thread.start()
+
+# Iniciar GUI y mantenerla viva
+log_window.start()
 
 # Mantener el proceso vivo
 try:
