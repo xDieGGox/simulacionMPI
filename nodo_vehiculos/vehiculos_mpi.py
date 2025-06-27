@@ -61,6 +61,7 @@ def recibir_semaforos():
         comm.send(("vehiculo", via, estado_vehiculo), dest=2, tag=20)
         log_window.write(f"Semáforo {via} → {nuevo_estado.upper()} → Vehículo {estado_vehiculo.upper()}")
 
+
 # Ejecutar la recepción en un hilo
 thread = threading.Thread(target=recibir_semaforos, daemon=True)
 thread.start()
