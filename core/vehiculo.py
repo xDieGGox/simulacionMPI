@@ -1,21 +1,26 @@
-from multiprocessing import Process
+from threading import Thread
 import time
-import random
+from core.utils import log
+from mpi4py import MPI
 
-class Vehiculo(Process):
-    def __init__(self, id_, via, estados_compartidos):
+class Vehiculo(Thread):
+    def __init__(self, id, via, estados):
         super().__init__()
-        self.id = id_
+        self.id = id
         self.via = via
-        self.estados = estados_compartidos
+        self.estados = estados
+        self.comm = MPI.COMM_WORLD
 
     def run(self):
         while True:
             estado = self.estados[self.via]
             if estado == "verde":
-                print(f"Vehículo {self.id} avanzando por {self.via}")
+                self.comm.send(("vehiculo", self.via, "avanzando"), dest=2, tag=20)
+                log(f"{self.id} avanzando", "VEHICULO")
             elif estado == "amarillo":
-                print(f"Vehículo {self.id} desacelerando por {self.via}")
+                self.comm.send(("vehiculo", self.via, "desacelerando"), dest=2, tag=20)
+                log(f"{self.id} desacelerando", "VEHICULO")
             else:
-                print(f"Vehículo {self.id} detenido en {self.via}")
-            time.sleep(random.uniform(0.5, 1.0))
+                self.comm.send(("vehiculo", self.via, "detenido"), dest=2, tag=20)
+                log(f"{self.id} detenido", "VEHICULO")
+            time.sleep(1)
