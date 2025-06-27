@@ -14,6 +14,15 @@ print(f"[RANK {rank} en {hostname}] Proceso iniciado correctamente.")
 log(f"Proceso controlador activo en {hostname} con rank {rank}", "CONTROLADOR")
 
 
+from core.tklog import LogWindow
+log_window = LogWindow("Controlador MPI")
+
+log_window.write(f"Controlador activo en {hostname} con rank {rank}")
+
+
+
+
+
 if rank != 1:
     exit()
 

@@ -7,3 +7,6 @@ def log(msg, tipo="LOG"):
     hostname = socket.gethostname()
     rank = MPI.COMM_WORLD.Get_rank()
     print(f"[{tipo}][{now}][RANK {rank}][{hostname}] {msg}")
+
+    with open(f"log_{hostname}_rank{rank}.txt", "a") as f:
+        f.write(f"[{tipo}][{now}][RANK {rank}][{hostname}] {msg}\n")

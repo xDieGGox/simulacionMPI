@@ -17,6 +17,16 @@ print(f"[RANK {rank} en {hostname}] Proceso iniciado correctamente.")
 log(f"Proceso de vehículos ejecutándose en {hostname} con rank {rank}", "INFO")
 
 
+from core.tklog import LogWindow
+log_window = LogWindow("Vehículos MPI")
+
+log_window.write(f"Vehículos activos en {hostname} con rank {rank}")
+
+
+
+
+
+
 if rank != 0:
     exit()
 

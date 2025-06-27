@@ -13,6 +13,14 @@ hostname = socket.gethostname()
 print(f"[RANK {rank} en {hostname}] Proceso iniciado correctamente.")
 log(f"Interfaz gráfica abierta en {hostname} con rank {rank}", "INTERFAZ")
 
+from core.tklog import LogWindow
+log_window = LogWindow("Interfaz MPI")
+
+log_window.write(f"Interfaz activa en {hostname} con rank {rank}")
+
+
+
+
 
 if rank != 2:
     exit()
