@@ -10,6 +10,11 @@ from core.utils import log
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
+hostname = socket.gethostname()
+
+print(f"[RANK {rank} en {hostname}] Proceso iniciado correctamente.")
+log(f"Proceso de vehículos ejecutándose en {hostname} con rank {rank}", "INFO")
+
 
 if rank != 0:
     exit()

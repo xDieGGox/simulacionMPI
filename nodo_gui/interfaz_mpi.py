@@ -7,6 +7,11 @@ from core.utils import log
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
+hostname = socket.gethostname()
+
+print(f"[RANK {rank} en {hostname}] Proceso iniciado correctamente.")
+log(f"Interfaz gráfica abierta en {hostname} con rank {rank}", "INTERFAZ")
+
 
 if rank != 2:
     exit()
@@ -25,10 +30,10 @@ direcciones = {
     "Este->Oeste": (-1, 0)
 }
 offsets = {
-    "Norte->Sur": [(300, -60), (300, -120), (300, -180)],
-    "Sur->Norte": [(300, 660), (300, 720), (300, 780)],
-    "Oeste->Este": [(-60, 300), (-120, 300), (-180, 300)],
-    "Este->Oeste": [(660, 300), (720, 300), (780, 300)],
+    "Norte->Sur": [(280, -60), (280, -120), (280, -180)],
+    "Sur->Norte": [(320, 660), (320, 720), (320, 780)],
+    "Oeste->Este": [(-60, 280), (-120, 280), (-180, 280)],
+    "Este->Oeste": [(660, 320), (720, 320), (780, 320)],
 }
 
 class GUI:
@@ -73,10 +78,43 @@ class GUI:
         for via in vias:
             dx, dy = direcciones[via]
             velocidad = 0
-            if estado_vehiculos[via] == "avanzando":
-                velocidad = 4
-            elif estado_vehiculos[via] == "desacelerando":
-                velocidad = 2
+
+            for i in range(3):
+                pos = self.posiciones[(via, i)]
+                x, y = pos
+
+                # Determinar si el vehículo ya está dentro de la intersección
+                en_interseccion = False
+                if via in ["Norte->Sur", "Sur->Norte"]:
+                    en_interseccion = 270 <= y <= 330
+                else:
+                    en_interseccion = 270 <= x <= 330
+
+                # Determinar velocidad según estado y posición
+                if estado_vehiculos[via] == "avanzando" or en_interseccion:
+                    velocidad = 4
+                elif estado_vehiculos[via] == "desacelerando":
+                    velocidad = 2
+                else:
+                    velocidad = 0  # Detenido fuera de la intersección
+
+                # Aplicar movimiento
+                pos[0] += dx * velocidad
+                pos[1] += dy * velocidad
+
+                # Reposicionar si sale de pantalla
+                if via == "Norte->Sur" and pos[1] > 620:
+                    pos[1] = -60
+                elif via == "Sur->Norte" and pos[1] < -60:
+                    pos[1] = 660
+                elif via == "Oeste->Este" and pos[0] > 620:
+                    pos[0] = -60
+                elif via == "Este->Oeste" and pos[0] < -60:
+                    pos[0] = 660
+
+                # Mover en GUI
+                self.canvas.coords(self.vehiculos_gui[via][i], pos[0], pos[1], pos[0]+10, pos[1]+20)
+
 
             for i in range(3):
                 pos = self.posiciones[(via, i)]
@@ -111,7 +149,7 @@ class GUI:
             self.canvas.itemconfig(self.semaforos_gui[via], fill=colores[estado_semaforos[via]])
 
         self.mover_vehiculos()
-        self.root.after(100, self.actualizar)
+        self.root.after(10, self.actualizar)
 
 # Inicia GUI
 root = tk.Tk()

@@ -7,6 +7,11 @@ from core.utils import log
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
+hostname = socket.gethostname()
+
+print(f"[RANK {rank} en {hostname}] Proceso iniciado correctamente.")
+log(f"Proceso controlador activo en {hostname} con rank {rank}", "CONTROLADOR")
+
 
 if rank != 1:
     exit()
@@ -31,7 +36,7 @@ while True:
             estados[via] = "amarillo"
             comm.send(("vehiculo", via, "amarillo"), dest=0, tag=11)
             comm.send(("semaforo", via, "amarillo"), dest=2, tag=12)
-        time.sleep(2)
+        time.sleep(1)
 
         # Luz roja
         for via in grupo:
