@@ -61,10 +61,26 @@ def recibir_semaforos():
         comm.send(("vehiculo", via, estado_vehiculo), dest=2, tag=20)
         log_window.write(f"Semáforo {via} → {nuevo_estado.upper()} → Vehículo {estado_vehiculo.upper()}")
 
+# Hilo para recibir estados vía broadcast
+def recibir_broadcast():
+    while True:
+        try:
+            # Crear buffer del tamaño máximo esperado (ajustable)
+            data = comm.bcast(None, root=1)
+            if isinstance(data, dict):
+                for via, estado in data.items():
+                    log_window.write(f"[BCAST] {via} → {estado.upper()}")
+        except Exception as e:
+            log_window.write(f"[ERROR BCAST] {e}")
+
+
+
 
 # Ejecutar la recepción en un hilo
-thread = threading.Thread(target=recibir_semaforos, daemon=True)
-thread.start()
+#thread = threading.Thread(target=recibir_semaforos, daemon=True)
+threading.Thread(target=recibir_semaforos, daemon=True).start()
+threading.Thread(target=recibir_broadcast, daemon=True).start()
+#thread.start()
 
 # Iniciar GUI y mantenerla viva
 log_window.start()

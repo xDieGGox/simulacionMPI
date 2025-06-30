@@ -5,6 +5,7 @@ from mpi4py import MPI
 import tkinter as tk
 from core.utils import log
 import socket
+import threading
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
@@ -159,6 +160,20 @@ class GUI:
 
         self.mover_vehiculos()
         self.root.after(10, self.actualizar)
+
+
+def escuchar_broadcast_seguro():
+    while True:
+        try:
+            data = comm.bcast(None, root=1)
+            if isinstance(data, dict):
+                for via, estado in data.items():
+                    root.after(0, log_window.write, f"[BCAST] Semáforo {via} → {estado.upper()}")
+        except Exception as e:
+            root.after(0, log_window.write, f"[ERROR BCAST] {e}")
+
+threading.Thread(target=escuchar_broadcast_seguro, daemon=True).start()
+
 
 # Inicia GUI
 root = tk.Tk()

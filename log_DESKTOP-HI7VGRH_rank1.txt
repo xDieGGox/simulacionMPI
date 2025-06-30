@@ -1,0 +1,8 @@
+[CONTROLADOR][22:07:34][RANK 1][DESKTOP-HI7VGRH] Proceso controlador activo en DESKTOP-HI7VGRH con rank 1
+[CONTROLADOR][22:07:34][RANK 1][DESKTOP-HI7VGRH] Iniciando nodo controlador
+[CONTROLADOR][22:21:18][RANK 1][DESKTOP-HI7VGRH] Proceso controlador activo en DESKTOP-HI7VGRH con rank 1
+[CONTROLADOR][22:21:18][RANK 1][DESKTOP-HI7VGRH] Iniciando nodo controlador
+[CONTROLADOR][22:25:38][RANK 1][DESKTOP-HI7VGRH] Proceso controlador activo en DESKTOP-HI7VGRH con rank 1
+[CONTROLADOR][22:25:38][RANK 1][DESKTOP-HI7VGRH] Iniciando nodo controlador
+[CONTROLADOR][22:26:04][RANK 1][DESKTOP-HI7VGRH] Proceso controlador activo en DESKTOP-HI7VGRH con rank 1
+[CONTROLADOR][22:26:04][RANK 1][DESKTOP-HI7VGRH] Iniciando nodo controlador

@@ -42,6 +42,7 @@ def ciclo_controlador():
                 comm.send(("vehiculo", via, "verde"), dest=0, tag=11)
                 comm.send(("semaforo", via, "verde"), dest=2, tag=12)
                 log_window.write(f"Semáforo {via} en VERDE")
+            comm.bcast(estados.copy(), root=1) 
             time.sleep(4)
 
             # Amarillo
@@ -50,6 +51,7 @@ def ciclo_controlador():
                 comm.send(("vehiculo", via, "amarillo"), dest=0, tag=11)
                 comm.send(("semaforo", via, "amarillo"), dest=2, tag=12)
                 log_window.write(f"Semáforo {via} en AMARILLO")
+            comm.bcast(estados.copy(), root=1)
             time.sleep(1)
 
             # Rojo
@@ -58,6 +60,7 @@ def ciclo_controlador():
                 comm.send(("vehiculo", via, "rojo"), dest=0, tag=11)
                 comm.send(("semaforo", via, "rojo"), dest=2, tag=12)
                 log_window.write(f"Semáforo {via} en ROJO")
+            comm.bcast(estados.copy(), root=1)  # Broadcast estados
 
 # Lanzar el controlador en un hilo
 controlador_thread = threading.Thread(target=ciclo_controlador, daemon=True)
