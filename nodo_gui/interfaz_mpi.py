@@ -159,7 +159,7 @@ class GUI:
             self.canvas.itemconfig(self.semaforos_gui[via], fill=colores[estado_semaforos[via]])
 
         self.mover_vehiculos()
-        self.root.after(10, self.actualizar)
+        self.root.after(20, self.actualizar)
 
 
 def escuchar_broadcast_seguro():
@@ -172,10 +172,11 @@ def escuchar_broadcast_seguro():
         except Exception as e:
             root.after(0, log_window.write, f"[ERROR BCAST] {e}")
 
-threading.Thread(target=escuchar_broadcast_seguro, daemon=True).start()
+
 
 
 # Inicia GUI
 root = tk.Tk()
+threading.Thread(target=escuchar_broadcast_seguro, daemon=True).start()
 gui = GUI(root)
 root.mainloop()
